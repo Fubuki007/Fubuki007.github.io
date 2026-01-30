@@ -1,9 +1,26 @@
 ---
 permalink: /
-title: "Academic Pages is a ready-to-fork GitHub Pages template for academic personal websites"
+title: "Fubuki的个人主页"
 author_profile: true
 redirect_from: 
   - /about/
   - /about.html
 ---
 
+我们的情人，不过是随便借个名字，用幻想吹出来的肥皂泡。
+
+把信拿去吧，你可以使假戏成真。
+
+我本来是无病呻吟，漫无目的地吐露爱情……
+
+现在这些漂泊不定的鸟儿
+
+有地方栖息了
+
+你可以从信里看出来——
+
+拿去吧！——
+
+由于不是出自真心，话就说得格外动听。
+
+——拿去吧，就这么办！

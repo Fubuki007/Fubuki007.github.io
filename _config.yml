@@ -9,7 +9,7 @@
 # Basic Site Settings
 locale                   : "zh-CN"
 site_theme               : "default" # The available themes options are "default", "air", "sunrise", "mint", "dirt" and "contrast"
-title                    : "Fubuki的个人主页"
+title                    : "Fubuki007"
 title_separator          : "-"
 name                     : &name "Fubuki007"
 description              : &description "Fubuki007的个人主页"

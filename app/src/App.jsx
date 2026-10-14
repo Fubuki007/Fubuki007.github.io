@@ -298,9 +298,6 @@ export default function App() {
               Design beyond
               <br />
               the <span className="serif">ordinary.</span>
-              <span className="hero-asterisk" aria-hidden="true">
-                ✳
-              </span>
             </h1>
             <div className="hero-description">
               <span className="short-line" />
@@ -584,9 +581,6 @@ export default function App() {
                 Great things
                 <br />
                 start with a <span className="serif">hello.</span>
-                <span className="contact-star" aria-hidden="true">
-                  ✳
-                </span>
               </h2>
               <div className="contact-bottom">
                 <p>

@@ -1,5 +1,5 @@
 export const profile = {
-  name: "吹雪",
+  name: "Fubuki",
   handle: "Fubuki007",
   university: "广东技术师范大学",
   major: "电气工程及其自动化",
@@ -9,7 +9,7 @@ export const profile = {
   email: "hejiawei1021@163.com",
   phone: "15976193039",
   description:
-    "我是一名电气工程及其自动化专业本科生，主要关注通感一体化、雷达感知与算法仿真。",
+    "",
 };
 
 export const education = [
@@ -72,7 +72,6 @@ export const achievements = [
   { year: "2026.07", title: "第十八届“中国电机工程学会杯”全国大学生电工数学建模竞赛", award: "国家级三等奖" },
   { year: "2026.06", title: "人工智能综合能力提升培训（国家高等教育智慧教育平台）", award: "培训证书" },
   { year: "2025.09", title: "“大湾区杯”粤港澳金融数学建模竞赛", award: "省级三等奖" },
-  { year: "2025.09", title: "广东技术师范大学“布莱德曼”ACM 算法竞赛", award: "银奖" },
   { year: "2025.06", title: "粤港澳学生信息科技创新大赛", award: "校级三等奖" },
   { year: "2025.06", title: "大学生创新创业训练计划：数智赋能电气《专业概论》智慧课程建设方案设计", award: "校级优秀结项" },
   { year: "2026.12", title: "其他专项奖学金", award: "对应竞赛获奖" },

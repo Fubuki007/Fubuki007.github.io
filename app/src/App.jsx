@@ -99,7 +99,7 @@ export default function App() {
             aria-label="吹雪首页"
             onClick={closeMenu}
           >
-            吹雪<span className="wordmark-dot">·</span>
+            Fubuki<span className="wordmark-dot">·</span>
           </a>
           <span className="header-caption">STUDENT / RESEARCH PROFILE</span>
           <button

@@ -93,15 +93,6 @@ export default function App() {
       </a>
       <header className="site-header">
         <div className="header-inner shell">
-          <a
-            className="wordmark"
-            href="#home"
-            aria-label="吹雪首页"
-            onClick={closeMenu}
-          >
-            Fubuki<span className="wordmark-dot">·</span>
-          </a>
-          <span className="header-caption">STUDENT / RESEARCH PROFILE</span>
           <button
             className="menu-toggle"
             aria-expanded={menuOpen}
@@ -147,14 +138,12 @@ export default function App() {
                 <span className="live-dot" /> ACADEMIC PROFILE / 2026
               </div>
               <h1 id="hero-title">
-                你好，
-                <br />
-                我是 <span className="accent-text">吹雪。</span>
+              吹雪<span className="accent-text">。</span>
               </h1>
               <p className="hero-lead">
-                电气工程及其自动化专业本科生
+              广东技术师范大学
                 <br />
-                在通感一体化与雷达感知中，练习把问题做深。
+              电气工程及其自动化专业本科生
               </p>
               <div className="hero-actions">
                 <a className="pill-button primary" href="#research">
@@ -173,12 +162,16 @@ export default function App() {
                 </span>
               </div>
               <div className="panel-rule" />
-              <p className="panel-kicker">RESEARCH FOCUS</p>
+              <p className="panel-kicker">ACHIEVEMENTS / 成果概览</p>
               <div className="focus-list">
-                {researchInterests.slice(0, 3).map((interest, index) => (
-                  <div className="focus-item" key={interest}>
+                {[
+                  `${publications.length} 篇会议论文`,
+                  `${researchRecords.length} 项科研经历`,
+                  `${achievements.length} 项竞赛与荣誉`,
+                ].map((summary, index) => (
+                  <div className="focus-item" key={summary}>
                     <span>0{index + 1}</span>
-                    <strong>{interest}</strong>
+                    <strong>{summary}</strong>
                   </div>
                 ))}
               </div>
@@ -200,31 +193,17 @@ export default function App() {
           <SectionLabel number="01">ABOUT / 关于我</SectionLabel>
           <div className="section-heading about-heading">
             <div>
-              <p className="section-kicker">A STUDENT, ALWAYS LEARNING</p>
+              <p className="section-kicker">PROFILE / 个人信息</p>
               <h2 id="about-title">
-                先把基础学扎实，
+                广东技术师范大学，
                 <br />
-                <span className="accent-text">再向问题深处走。</span>
+                <span className="accent-text">电气工程及其自动化专业本科生。</span>
               </h2>
             </div>
-            <p className="heading-note">
-              我关注真实问题如何被建模、验证与表达，也在持续补齐工程实现与学术写作能力。
-            </p>
           </div>
           <div className="profile-grid">
-            <div className="profile-intro">
-              <div className="identity-mark" aria-hidden="true">
-                <span>吹</span>
-                <span>雪</span>
-              </div>
-              <div>
-                <p className="profile-name">{profile.name}</p>
-                <p className="profile-role">{profile.status}</p>
-              </div>
-            </div>
             <div className="profile-details">
               <p className="about-description">{profile.description}</p>
-              <p className="motto">“{profile.motto}”</p>
               <dl className="academic-details">
                 <div>
                   <dt>学校</dt>
@@ -274,14 +253,12 @@ export default function App() {
           <SectionLabel number="02">RESEARCH / 科研与学习</SectionLabel>
           <div className="section-heading">
             <div>
-              <p className="section-kicker">QUESTIONS → MODELS → EVIDENCE</p>
+              <p className="section-kicker">RESEARCH / 科研经历</p>
               <h2 id="research-title">
-                记录每一次
-                <br />
-                <span className="accent-text">靠近答案的尝试。</span>
+                科研经历
               </h2>
             </div>
-            <p className="heading-note">从文献、公式和代码出发，把抽象想法变成可以复现的结果。</p>
+            <p className="heading-note">围绕通感一体化与雷达感知开展研究、仿真和论文写作。</p>
           </div>
           <div className="interest-block">
             <span className="block-label">研究兴趣</span>
@@ -310,14 +287,12 @@ export default function App() {
           <SectionLabel number="03">OUTPUT / 成果与荣誉</SectionLabel>
           <div className="section-heading">
             <div>
-              <p className="section-kicker">WORK IN PROGRESS</p>
+              <p className="section-kicker">OUTPUT / 成果与荣誉</p>
               <h2 id="achievements-title">
-                学习留下的
-                <br />
-                <span className="accent-text">一些证据。</span>
+                成果与荣誉
               </h2>
             </div>
-            <p className="heading-note">阶段性成果会提醒我继续保持耐心，也提醒我把每一步做得更扎实。</p>
+            <p className="heading-note">论文、科研项目、竞赛与培训证书。</p>
           </div>
           <div className="output-grid">
             <div className="publication-card">
@@ -363,9 +338,7 @@ export default function App() {
             <div className="contact-main">
               <div className="eyebrow"><span className="live-dot" /> OPEN TO ACADEMIC EXCHANGE</div>
               <h2 id="contact-title">
-                保持联系，
-                <br />
-                <span className="accent-text">一起讨论问题。</span>
+                欢迎联系我
               </h2>
               <div className="contact-bottom">
                 <p>如果你对通感一体化、雷达感知或学习方法有想法，欢迎发邮件交流。</p>

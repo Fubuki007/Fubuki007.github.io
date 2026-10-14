@@ -9,8 +9,7 @@ export const profile = {
   email: "hejiawei1021@163.com",
   phone: "15976193039",
   description:
-    "",
-  motto: "",
+    "我是一名电气工程及其自动化专业本科生，主要关注通感一体化、雷达感知与算法仿真。",
 };
 
 export const education = [
@@ -61,6 +60,12 @@ export const publications = [
       "Parameter Estimation for Full-Duplex MIMO-OFDM ISAC Systems with Self-Interference Cancellation",
     venue: "Proceedings of AIPIP EI",
   },
+  {
+    year: "2026",
+    authorship: "第二作者",
+    title: "单比特雷达参数估计相关合作论文",
+    venue: "Proceedings of AIPIP EI",
+  },
 ];
 
 export const achievements = [
@@ -70,10 +75,13 @@ export const achievements = [
   { year: "2025.09", title: "广东技术师范大学“布莱德曼”ACM 算法竞赛", award: "银奖" },
   { year: "2025.06", title: "粤港澳学生信息科技创新大赛", award: "校级三等奖" },
   { year: "2025.06", title: "大学生创新创业训练计划：数智赋能电气《专业概论》智慧课程建设方案设计", award: "校级优秀结项" },
+  { year: "2026.12", title: "其他专项奖学金", award: "对应竞赛获奖" },
+  { year: "2027.06", title: "大学生创新创业训练计划：基于单比特量化的低空轻量化通感融合参数估计方法研究", award: "省级优秀结项" },
 ];
 
 export const skills = [
   { label: "MATLAB / Python", detail: "通信物理层建模、算法实现与性能对比仿真" },
   { label: "C 语言", detail: "全国计算机等级考试二级，具备程序设计基础" },
   { label: "学术写作", detail: "英文摘要、论文初稿、排版与图表整理" },
+  { label: "英语阅读", detail: "CET-4 535 · CET-6 479，可阅读 IEEE 等专业文献" },
 ];

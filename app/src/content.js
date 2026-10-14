@@ -63,7 +63,7 @@ export const publications = [
   {
     year: "2026",
     authorship: "第二作者",
-    title: "单比特雷达参数估计相关合作论文",
+    title: "One-Bit Parabolic-Interpolation Angle Localization for Integrated Sensing and Communication",
     venue: "Proceedings of AIPIP EI",
   },
 ];
@@ -80,7 +80,7 @@ export const achievements = [
 
 export const skills = [
   { label: "MATLAB / Python", detail: "通信物理层建模、算法实现与性能对比仿真" },
-  { label: "C 语言", detail: "全国计算机等级考试二级，具备程序设计基础" },
+  { label: "编程", detail: "C语言二级/Vibe coding享受者" },
   { label: "学术写作", detail: "英文摘要、论文初稿、排版与图表整理" },
-  { label: "英语阅读", detail: "CET-4 535 · CET-6 479，可阅读 IEEE 等专业文献" },
+  { label: "英语能力", detail: "CET-4/CET-6" },
 ];

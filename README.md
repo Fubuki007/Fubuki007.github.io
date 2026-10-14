@@ -1,25 +1,24 @@
-# Fubuki 的个人主页
+# Fubuki Portfolio
 
-基于 Jekyll 和 GitHub Pages 构建的个人网站。
-
-网站地址：[https://fubuki007.github.io](https://fubuki007.github.io)
+React + Vite 个人作品集基础版。网站入口为 [fubuki007.github.io](https://fubuki007.github.io)。
 
 ## 本地预览
 
-安装 Ruby 和 Bundler 后，在项目目录运行：
+需要 Node.js 22.12 及以上版本。
 
 ```bash
-bundle install
-bundle exec jekyll serve --livereload --host 127.0.0.1
+npm ci
+npm run dev
 ```
 
-然后访问 <http://127.0.0.1:4000>。
+默认访问 `http://127.0.0.1:5173/`。运行 `npm run build` 会把静态文件生成到仓库根目录，供 GitHub Pages 从 `master` 分支根目录发布。根目录的 `index.html`、`favicon.svg`、`media/` 与 `assets/portfolio/` 是需要一并提交的构建产物。`.nojekyll` 让 Pages 直接提供这些静态文件。
 
 ## 更新内容
 
-- 首页文字：`_pages/about.md`
-- 站点标题和个人资料：`_config.yml`
-- 头像与图标：`images/`
-- 下载文件：`files/`
+- 个人姓名、邮箱、介绍与项目文案：`app/src/content.js`
+- 页面结构和交互：`app/src/App.jsx`
+- 样式与响应式布局：`app/src/styles.css`
+- 首页动态视觉源文件：`app/scripts/media-scene.js`
+- 重新生成首页视频和海报：`npm run generate:media`，然后运行 `npm run build`
 
-将更改推送到 `master` 分支后，GitHub Pages 会自动发布。
+当前三张作品封面均标注为概念展示。真实项目经历、客户信息、绩效数字与肖像素材应在提供可核实材料后替换。

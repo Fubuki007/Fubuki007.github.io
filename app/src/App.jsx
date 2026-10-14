@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { capabilities, profile, projects } from "./content";
+import { profile, researchInterests, researchRecords } from "./content";
 
 const navigation = [
-  { id: "about", label: "关于我" },
-  { id: "work", label: "精选作品" },
-  { id: "expertise", label: "我的优势" },
+  { id: "about", label: "个人简介" },
+  { id: "research", label: "科研与学习" },
 ];
-const filters = ["全部", "视觉设计", "品牌设计", "AI 探索"];
 
 function Arrow({ diagonal = false, className = "" }) {
   return (
@@ -25,50 +23,6 @@ function Arrow({ diagonal = false, className = "" }) {
   );
 }
 
-function Mark({ type }) {
-  return (
-    <svg
-      className="capability-mark"
-      viewBox="0 0 80 80"
-      fill="none"
-      aria-hidden="true"
-    >
-      {type === "visual" && (
-        <>
-          <path d="M14 14h52v52H14zM14 40h52M40 14v52" stroke="currentColor" />
-          <circle cx="40" cy="40" r="26" stroke="currentColor" />
-          <circle cx="40" cy="40" r="5" fill="currentColor" />
-        </>
-      )}
-      {type === "ai" && (
-        <>
-          {[0, 45, 90, 135].map((a) => (
-            <ellipse
-              key={a}
-              cx="40"
-              cy="40"
-              rx="12"
-              ry="31"
-              stroke="currentColor"
-              transform={`rotate(${a} 40 40)`}
-            />
-          ))}
-          <circle cx="40" cy="40" r="4" fill="currentColor" />
-        </>
-      )}
-      {type === "brand" && (
-        <>
-          <path
-            d="m40 8 29 16v32L40 72 11 56V24L40 8Zm0 0v64M11 24l58 32M69 24 11 56"
-            stroke="currentColor"
-          />
-          <path d="m11 24 29 16 29-16M40 40v32" stroke="currentColor" />
-        </>
-      )}
-    </svg>
-  );
-}
-
 function SectionLabel({ number, children }) {
   return (
     <div className="section-label">
@@ -78,76 +32,11 @@ function SectionLabel({ number, children }) {
   );
 }
 
-function ProjectDialog({ project, onClose }) {
-  const dialog = useRef(null);
-  useEffect(() => {
-    if (!project) return;
-    const element = dialog.current;
-    element.showModal();
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      element.close();
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [project]);
-  return (
-    <dialog
-      ref={dialog}
-      className="project-dialog"
-      aria-labelledby="project-title"
-      onCancel={onClose}
-      onClick={(event) => {
-        if (event.target === dialog.current) onClose();
-      }}
-    >
-      {project && (
-        <article>
-          <button
-            className="dialog-close"
-            autoFocus
-            onClick={onClose}
-            aria-label="关闭项目详情"
-          >
-            ✕
-          </button>
-          <img className="dialog-image" src={project.image} alt={project.alt} />
-          <div className="dialog-body">
-            <div className="eyebrow">
-              {project.disciplines} <span> / CONCEPT STUDY</span>
-            </div>
-            <h2 id="project-title">{project.title}</h2>
-            <p>{project.summary}</p>
-            <h3>设计思路</h3>
-            <ul>
-              {project.approach.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-            <p className="project-note">{project.note}</p>
-            <a
-              className="text-link"
-              href={`mailto:${profile.email}?subject=${encodeURIComponent(`聊聊 ${project.title}`)}`}
-            >
-              聊聊这个方向 <Arrow diagonal />
-            </a>
-          </div>
-        </article>
-      )}
-    </dialog>
-  );
-}
-
 export default function App() {
   const [activeSection, setActiveSection] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
-  const [filter, setFilter] = useState("全部");
-  const [selectedProject, setSelectedProject] = useState(null);
   const [toast, setToast] = useState("");
   const toastTimer = useRef(null);
-  const visibleProjects = projects.filter(
-    (project) => filter === "全部" || project.category === filter,
-  );
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -177,7 +66,7 @@ export default function App() {
   async function copyEmail() {
     try {
       await navigator.clipboard.writeText(profile.email);
-      setToast("邮箱已复制，期待你的来信。");
+      setToast("邮箱已复制，欢迎交流。");
     } catch {
       setToast(`请手动复制邮箱：${profile.email}`);
     }
@@ -198,9 +87,9 @@ export default function App() {
             aria-label="Fubuki 首页"
             onClick={() => setMenuOpen(false)}
           >
-            fubuki<span>®</span>
+            fubuki
           </a>
-          <span className="header-caption">INDEPENDENT CREATIVE PORTFOLIO</span>
+          <span className="header-caption">PERSONAL / ACADEMIC HOMEPAGE</span>
           <button
             className="menu-toggle"
             aria-expanded={menuOpen}
@@ -243,67 +132,55 @@ export default function App() {
         <section className="hero" id="home" aria-labelledby="hero-title">
           <div className="shell hero-content">
             <div className="eyebrow hero-eyebrow">
-              <span className="live-dot" /> FUBUKI — DESIGN & EXPLORATION
+              <span className="live-dot" /> FUBUKI — LEARNING & RESEARCH
             </div>
             <h1 id="hero-title">
-              Design beyond
+              Stay curious.
               <br />
-              the <span className="serif">ordinary.</span>
+              Keep <span className="serif">exploring.</span>
             </h1>
             <div className="hero-description">
               <span className="short-line" />
               <p>
-                不止于所见，
+                从学习出发，
                 <br />
-                让想象成为有感知的设计。
+                在问题中寻找研究的方向。
               </p>
             </div>
-            <a className="pill-button primary" href="#work">
-              探索我的作品 <Arrow diagonal />
+            <a className="pill-button primary" href="#research">
+              科研与学习记录 <Arrow diagonal />
             </a>
           </div>
           <div className="hero-bottom shell">
             <a className="scroll-link" href="#about">
-              <span className="scroll-circle">↓</span> 向下探索{" "}
+              <span className="scroll-circle">↓</span> 了解更多{" "}
               <span className="muted">SCROLL TO DISCOVER</span>
             </a>
             <span className="hero-roles">
-              VISUAL DESIGN <i /> AI EXPLORATION <i /> BRAND IDENTITY
+              LEARN <i /> QUESTION <i /> EXPLORE
             </span>
           </div>
         </section>
-
-        <div className="discipline-strip" aria-hidden="true">
-          <div className="shell">
-            <span>VISUAL DESIGN</span>
-            <b>✳</b>
-            <span>AI EXPLORATION</span>
-            <b>✳</b>
-            <span>BRAND IDENTITY</span>
-            <b>✳</b>
-            <span>BEYOND THE ORDINARY</span>
-          </div>
-        </div>
 
         <section
           className="about section-space shell"
           id="about"
           aria-labelledby="about-title"
         >
-          <SectionLabel number="01">ABOUT ME / 关于我</SectionLabel>
+          <SectionLabel number="01">ABOUT / 个人简介</SectionLabel>
           <div className="about-grid">
             <div
               className="portrait-card"
               role="img"
-              aria-label="Fubuki 字母肖像，待补充个人照片"
+              aria-label="Fubuki 的字母标识"
             >
               <div className="portrait-top">
                 <span>
-                  THE PERSON
+                  LEARNING
                   <br />
-                  BEHIND THE PIXELS.
+                  WITH CURIOSITY.
                 </span>
-                <span>↗</span>
+                <span aria-hidden="true">↗</span>
               </div>
               <div className="portrait-monogram" aria-hidden="true">
                 F<span>.</span>
@@ -311,200 +188,114 @@ export default function App() {
               <div className="portrait-bottom">
                 <span>FUBUKI</span>
                 <span>
-                  CREATIVE MIND,
+                  ASK QUESTIONS.
                   <br />
-                  CURIOUS SOUL.
+                  SEEK UNDERSTANDING.
                 </span>
               </div>
             </div>
             <div className="about-copy">
-              <div className="eyebrow muted">A LITTLE ABOUT MY WORLD</div>
+              <div className="eyebrow muted">A STUDENT, ALWAYS LEARNING</div>
               <h2 id="about-title">
-                你好，我是 <span className="serif">Fubuki.</span>
+                你好，我是 <span className="serif">{profile.name}.</span>
                 <br />
-                让创意，有迹可循。
+                在学习中，持续探索。
               </h2>
               <div className="role-tags">
-                {profile.roles.map((role) => (
-                  <span key={role}>{role}</span>
-                ))}
+                <span>{profile.status}</span>
+                <span>{profile.university}</span>
               </div>
               <p className="about-description">{profile.description}</p>
-              <p className="motto">「{profile.motto}」</p>
-              <div className="experience-row">
-                <span className="eyebrow muted">MY JOURNEY</span>
+              <p className="motto">{profile.motto}</p>
+              <dl className="academic-details">
                 <div>
-                  <strong>保持好奇，持续探索</strong>
-                  <p>完整履历即将补充 · 在这里记录我的设计经历。</p>
-                </div>
-                <span aria-hidden="true">↗</span>
-              </div>
-              <div className="about-stats">
-                <div>
-                  <strong>
-                    03<span> /</span>
-                  </strong>
-                  <span>创作方向</span>
+                  <dt>学校</dt>
+                  <dd>{profile.university}</dd>
                 </div>
                 <div>
-                  <strong>
-                    {String(projects.length).padStart(2, "0")}
-                    <span> /</span>
-                  </strong>
-                  <span>概念作品展示</span>
+                  <dt>邮箱</dt>
+                  <dd>
+                    <a href={`mailto:${profile.email}`}>{profile.email}</a>
+                  </dd>
                 </div>
                 <div>
-                  <strong>∞</strong>
-                  <span>关于设计的可能</span>
+                  <dt>GitHub</dt>
+                  <dd>
+                    <a
+                      href={profile.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {profile.handle} <Arrow diagonal />
+                    </a>
+                  </dd>
                 </div>
-              </div>
-              <a className="text-link" href={`mailto:${profile.email}`}>
-                {profile.email} <Arrow diagonal />
+              </dl>
+              <a className="text-link" href="#research">
+                了解科研与学习记录 <Arrow diagonal />
               </a>
             </div>
           </div>
         </section>
 
         <section
-          className="work section-space shell"
-          id="work"
-          aria-labelledby="work-title"
+          className="research section-space shell"
+          id="research"
+          aria-labelledby="research-title"
         >
-          <SectionLabel number="02">SELECTED WORK / 精选作品</SectionLabel>
+          <SectionLabel number="02">
+            RESEARCH & LEARNING / 科研与学习
+          </SectionLabel>
           <div className="section-heading">
             <div>
-              <h2 id="work-title">
-                一些想法，
+              <h2 id="research-title">
+                从问题出发，
                 <br />
-                一些<span className="serif">新的可能。</span>
+                <span className="serif">记录探索的过程。</span>
               </h2>
-              <p>在视觉、品牌与技术的交汇处，留下创作的痕迹。</p>
+              <p>关注学习积累，也关注每一次研究尝试背后的思考。</p>
             </div>
-            <span className="work-aside">
-              A SELECTION OF
-              <br />
-              IDEAS & EXPERIMENTS
-              <br />
-              <span>— CONCEPT COLLECTION</span>
-            </span>
           </div>
-          <div className="work-toolbar">
-            <div className="filters" role="group" aria-label="作品分类">
-              {filters.map((item) => (
-                <button
-                  key={item}
-                  onClick={() => setFilter(item)}
-                  aria-pressed={filter === item}
-                  className={filter === item ? "selected" : ""}
-                >
-                  {item}
-                  {item === "全部" && <sup>03</sup>}
-                </button>
-              ))}
+          {researchInterests.length > 0 && (
+            <div className="research-interests">
+              <h3>研究兴趣</h3>
+              <div className="role-tags">
+                {researchInterests.map((interest) => (
+                  <span key={interest}>{interest}</span>
+                ))}
+              </div>
             </div>
-            <span className="work-count" aria-live="polite">
-              {String(visibleProjects.length).padStart(2, "0")} PROJECTS
-            </span>
-          </div>
-          <div
-            className={`project-grid ${filter !== "全部" ? "is-filtered" : ""}`}
-          >
-            {visibleProjects.map((project, index) => (
-              <button
-                key={project.id}
-                className={`project-card ${project.className}`}
-                onClick={() => setSelectedProject(project)}
-                aria-label={`查看 ${project.title} 项目详情`}
-              >
-                <div className="project-visual">
-                  <img
-                    src={project.image}
-                    alt={project.alt}
-                    loading="lazy"
-                    width="1200"
-                    height="900"
-                  />
-                  <span className="project-badge">
-                    概念展示 / {project.year}
-                  </span>
-                  <span className="project-open">
-                    <Arrow diagonal />
-                  </span>
-                  {project.id === "form" && (
-                    <div className="form-overlay" aria-hidden="true">
-                      <span>
-                        EXPERIMENTAL FORMS
-                        <br />
-                        AN EXPLORATION IN LIGHT
-                      </span>
-                      <strong>
-                        FORM<span>®</span>
-                      </strong>
-                      <span>NOTHING IS ORDINARY.</span>
-                    </div>
+          )}
+          {researchRecords.length > 0 ? (
+            <div className="research-list">
+              {researchRecords.map((record) => (
+                <article className="research-record" key={record.id}>
+                  <div className="eyebrow muted">
+                    {record.type}
+                    {record.period ? ` / ${record.period}` : ""}
+                  </div>
+                  <h3>{record.title}</h3>
+                  <p>{record.description}</p>
+                  {record.href && (
+                    <a
+                      className="text-link"
+                      href={record.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      查看研究资料 <Arrow diagonal />
+                    </a>
                   )}
-                </div>
-                <div className="project-caption">
-                  <div>
-                    <div className="eyebrow muted">{project.disciplines}</div>
-                    <h3>{project.title}</h3>
-                    <p>{project.subtitle}</p>
-                  </div>
-                  <span className="project-number">/{project.number}</span>
-                </div>
-              </button>
-            ))}
-          </div>
-          <p className="collection-note">
-            <span className="live-dot" /> 灵感持续生长中，更多真实作品即将加入。
-          </p>
-        </section>
-
-        <section
-          className="expertise section-space"
-          id="expertise"
-          aria-labelledby="expertise-title"
-        >
-          <div className="shell">
-            <SectionLabel number="03">WHAT I BRING / 我的优势</SectionLabel>
-            <div className="section-heading">
-              <h2 id="expertise-title">
-                感性的创意，
-                <br />
-                <span className="serif">理性的表达。</span>
-              </h2>
-              <p>
-                不止创造好看的画面。
-                <br />
-                更关注每一个设计背后的逻辑与可能。
-              </p>
-            </div>
-            <div className="capability-grid">
-              {capabilities.map((item) => (
-                <article className="capability-card" key={item.number}>
-                  <div className="capability-top">
-                    <Mark type={item.icon} />
-                    <span>/{item.number}</span>
-                  </div>
-                  <div className="eyebrow muted">{item.en}</div>
-                  <h3>{item.title}</h3>
-                  <p>{item.text}</p>
-                  <div className="capability-tags">
-                    {item.tags.map((tag) => (
-                      <span key={tag}>{tag}</span>
-                    ))}
-                  </div>
                 </article>
               ))}
             </div>
-            <div className="process-line">
-              <span>从想法，到发生。</span>
-              <p>
-                DISCOVER <span>↗</span> EXPLORE <span>↗</span> CREATE{" "}
-                <span>↗</span> REFINE
-              </p>
+          ) : (
+            <div className="research-empty">
+              <div className="eyebrow muted">RESEARCH NOTES</div>
+              <h3>研究记录，正在整理中。</h3>
+              <p>研究方向、项目经历与成果将陆续更新。</p>
             </div>
-          </div>
+          )}
         </section>
 
         <section
@@ -513,27 +304,27 @@ export default function App() {
           aria-labelledby="contact-title"
         >
           <div className="shell contact-inner">
-            <SectionLabel number="04">LET’S CONNECT / 保持联系</SectionLabel>
+            <SectionLabel number="03">CONTACT / 联系方式</SectionLabel>
             <div className="contact-main">
               <div className="eyebrow">
-                <span className="live-dot" /> ALWAYS OPEN TO NEW POSSIBILITIES
+                <span className="live-dot" /> OPEN TO ACADEMIC EXCHANGE
               </div>
               <h2 id="contact-title">
-                Great things
+                Let’s share
                 <br />
-                start with a <span className="serif">hello.</span>
+                <span className="serif">ideas.</span>
               </h2>
               <div className="contact-bottom">
                 <p>
-                  有个想法，或只是想打个招呼？
+                  欢迎交流科研思考与学习心得。
                   <br />
-                  <span>期待与你一起，让下一个灵感发生。</span>
+                  <span>如果你有相关问题或想法，可以通过邮件联系我。</span>
                 </p>
                 <a
                   className="pill-button primary"
                   href={`mailto:${profile.email}`}
                 >
-                  聊聊你的想法 <Arrow diagonal />
+                  邮件联系 <Arrow diagonal />
                 </a>
               </div>
               <div className="email-line">
@@ -555,10 +346,10 @@ export default function App() {
             </div>
             <footer>
               <a className="wordmark" href="#home">
-                fubuki<span>®</span>
+                fubuki
               </a>
               <span>
-                © {new Date().getFullYear()} FUBUKI. MADE WITH CURIOSITY.
+                © {new Date().getFullYear()} FUBUKI / PERSONAL HOMEPAGE
               </span>
               <a
                 href={profile.github}
@@ -577,10 +368,6 @@ export default function App() {
       <div className={`toast ${toast ? "visible" : ""}`} role="status">
         {toast}
       </div>
-      <ProjectDialog
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
     </>
   );
 }

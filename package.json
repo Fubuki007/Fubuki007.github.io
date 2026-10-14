@@ -1,5 +1,5 @@
 {
-  "name": "fubuki-portfolio",
+  "name": "fubuki-academic-homepage",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -7,17 +7,15 @@
     "dev": "vite --host 127.0.0.1",
     "build": "vite build && node scripts/publish-build.mjs",
     "preview": "vite preview --host 127.0.0.1",
-    "test:preview": "node scripts/check-preview.mjs",
-    "generate:media": "node scripts/generate-media.mjs"
+    "test:preview": "node scripts/check-preview.mjs"
   },
   "dependencies": {
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
-    "playwright": "^1.64.0",
     "@vitejs/plugin-react": "^5.0.0",
-    "three": "^0.180.0",
+    "playwright": "^1.64.0",
     "vite": "^7.1.0"
   },
   "engines": {

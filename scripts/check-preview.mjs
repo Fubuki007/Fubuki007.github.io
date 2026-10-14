@@ -35,6 +35,7 @@ try {
     const page = await browser.newPage({
       viewport: { width, height },
       deviceScaleFactor: 1,
+      permissions: ["clipboard-read", "clipboard-write"],
     });
     const errors = [];
     page.on("pageerror", (error) => errors.push(error.message));
@@ -44,13 +45,23 @@ try {
       title: document.title,
       width: document.documentElement.scrollWidth,
       viewport: innerWidth,
-      overflow: [...document.querySelectorAll('body *')]
+      overflow: [...document.querySelectorAll("body *")]
         .filter((element) => {
           const rect = element.getBoundingClientRect();
-          return rect.right > innerWidth + 1 && getComputedStyle(element).position !== 'absolute';
+          return (
+            rect.right > innerWidth + 1 &&
+            getComputedStyle(element).position !== "absolute"
+          );
         })
         .slice(0, 8)
-        .map((element) => ({ tag: element.tagName, class: element.className?.baseVal ?? element.className, parent: element.parentElement?.className?.baseVal ?? element.parentElement?.className, right: Math.round(element.getBoundingClientRect().right) })),
+        .map((element) => ({
+          tag: element.tagName,
+          class: element.className?.baseVal ?? element.className,
+          parent:
+            element.parentElement?.className?.baseVal ??
+            element.parentElement?.className,
+          right: Math.round(element.getBoundingClientRect().right),
+        })),
       images: [...document.querySelectorAll("img")].map((image) => ({
         src: image.getAttribute("src"),
         loaded: image.complete && image.naturalWidth > 0,
@@ -59,34 +70,33 @@ try {
         (section) => section.id,
       ),
       emailLinks: [...document.querySelectorAll('a[href^="mailto:"]')].length,
+      brokenAnchors: [...document.querySelectorAll('a[href^="#"]')]
+        .map((link) => link.getAttribute("href").slice(1))
+        .filter((id) => id && !document.getElementById(id)),
     }));
     if (
       !response.ok() ||
       errors.length ||
       result.width > width ||
       result.images.some((image) => !image.loaded) ||
-      result.emailLinks < 1
+      result.emailLinks < 1 ||
+      result.brokenAnchors.length
     )
       throw new Error(
         `${name}: ${JSON.stringify({ status: response.status(), errors, result })}`,
       );
     if (name === "desktop") {
-      await page.getByRole("button", { name: "品牌设计" }).click();
-      if ((await page.locator(".project-card").count()) !== 1)
-        throw new Error("Filtering failed");
-      await page.locator(".project-card").click();
-      if (!(await page.locator("dialog").isVisible()))
-        throw new Error("Project dialog did not open");
-      await page.getByRole("button", { name: "关闭项目详情" }).click();
-      if (await page.locator("dialog").isVisible())
-        throw new Error("Project dialog did not close");
+      await page.getByRole("button", { name: "复制邮箱地址" }).click();
+      const email = await page.evaluate(() => navigator.clipboard.readText());
+      if (email !== "hejiawei1021@163.com")
+        throw new Error("Email copy failed");
     } else if (name === "mobile") {
       await page.getByRole("button", { name: "打开导航" }).click();
       if (!(await page.getByRole("navigation", { name: "主导航" }).isVisible()))
         throw new Error("Mobile menu did not open");
       await page
         .getByRole("navigation", { name: "主导航" })
-        .getByRole("link", { name: "精选作品" })
+        .getByRole("link", { name: "科研与学习" })
         .click();
       if (await page.getByRole("navigation", { name: "主导航" }).isVisible())
         throw new Error("Mobile menu did not close");

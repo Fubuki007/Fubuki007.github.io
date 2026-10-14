@@ -1,4 +1,4 @@
-import { cp, mkdir, rm } from "node:fs/promises";
+import { access, cp, mkdir, rm } from "node:fs/promises";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -16,6 +16,14 @@ function withinRoot(path) {
 for (const name of ["index.html", "favicon.svg", "media"]) {
   const destination = withinRoot(join(root, name));
   await rm(destination, { recursive: true, force: true });
+  if (name === "media") {
+    try {
+      await access(join(build, name));
+    } catch (error) {
+      if (error.code === "ENOENT") continue;
+      throw error;
+    }
+  }
   await cp(join(build, name), destination, { recursive: true });
 }
 

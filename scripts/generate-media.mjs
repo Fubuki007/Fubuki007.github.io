@@ -1,6 +1,6 @@
 import { chromium } from "playwright";
 import { spawn } from "node:child_process";
-import { mkdir, readdir, access, copyFile } from "node:fs/promises";
+import { mkdir, readdir, access } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { dirname } from "node:path";
@@ -62,39 +62,10 @@ try {
   });
   await page.goto(`http://127.0.0.1:${port}/media.html`);
   await page.waitForFunction(() => typeof window.renderFrame === "function");
-  await page
-    .locator("canvas")
-    .screenshot({ path: join(media, "hero-poster.png") });
   await page.evaluate(() => window.renderFrame(0.8));
   await page
     .locator("canvas")
     .screenshot({ path: join(media, "form-poster.png") });
-  await mkdir(join(root, ".preview"), { recursive: true });
-  const context = await browser.newContext({
-    viewport: { width: 1280, height: 720 },
-    recordVideo: {
-      dir: join(root, ".preview"),
-      size: { width: 1280, height: 720 },
-    },
-  });
-  const motionPage = await context.newPage();
-  await motionPage.goto(`http://127.0.0.1:${port}/media.html`);
-  await motionPage.waitForFunction(
-    () => typeof window.renderFrame === "function",
-  );
-  await motionPage.evaluate(() => {
-    const start = performance.now();
-    const animate = (now) => {
-      window.renderFrame((now - start) / 1000);
-      if (now - start < 3500) requestAnimationFrame(animate);
-    };
-    requestAnimationFrame(animate);
-  });
-  await motionPage.waitForTimeout(3700);
-  const video = motionPage.video();
-  await motionPage.close();
-  await copyFile(await video.path(), join(media, "hero-loop.webm"));
-  await context.close();
 } finally {
   await browser?.close();
   server.kill();

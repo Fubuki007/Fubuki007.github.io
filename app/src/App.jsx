@@ -144,9 +144,6 @@ export default function App() {
   const [filter, setFilter] = useState("全部");
   const [selectedProject, setSelectedProject] = useState(null);
   const [toast, setToast] = useState("");
-  const [playing, setPlaying] = useState(false);
-  const [videoError, setVideoError] = useState(false);
-  const video = useRef(null);
   const toastTimer = useRef(null);
   const visibleProjects = projects.filter(
     (project) => filter === "全部" || project.category === filter,
@@ -164,17 +161,6 @@ export default function App() {
       .querySelectorAll("main > section[id]")
       .forEach((section) => observer.observe(section));
     return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => {
-      if (motion.matches) video.current?.pause();
-      else video.current?.play().catch(() => setPlaying(false));
-    };
-    update();
-    motion.addEventListener("change", update);
-    return () => motion.removeEventListener("change", update);
   }, []);
 
   useEffect(() => {
@@ -197,12 +183,6 @@ export default function App() {
     }
     window.clearTimeout(toastTimer.current);
     toastTimer.current = window.setTimeout(() => setToast(""), 5000);
-  }
-
-  function toggleVideo() {
-    if (!video.current) return;
-    if (playing) video.current.pause();
-    else video.current.play().catch(() => setVideoError(true));
   }
 
   return (
@@ -261,35 +241,6 @@ export default function App() {
 
       <main id="main">
         <section className="hero" id="home" aria-labelledby="hero-title">
-          <div className="hero-media" aria-hidden="true">
-            <img
-              className="hero-poster"
-              src="/media/hero-poster.png"
-              alt=""
-              fetchPriority="high"
-            />
-            <video
-              ref={video}
-              className={videoError ? "is-hidden" : ""}
-              loop
-              muted
-              playsInline
-              preload="metadata"
-              poster="/media/hero-poster.png"
-              onPlay={() => setPlaying(true)}
-              onPause={() => setPlaying(false)}
-              onError={() => {
-                setVideoError(true);
-                setPlaying(false);
-              }}
-            >
-              <source src="/media/hero-loop.webm" type="video/webm" />
-            </video>
-          </div>
-          <div className="hero-ruler" aria-hidden="true">
-            <span>EXPERIMENT NO. 001</span>
-            <span>FORM / LIGHT / POSSIBILITY</span>
-          </div>
           <div className="shell hero-content">
             <div className="eyebrow hero-eyebrow">
               <span className="live-dot" /> FUBUKI — DESIGN & EXPLORATION
@@ -319,16 +270,6 @@ export default function App() {
             <span className="hero-roles">
               VISUAL DESIGN <i /> AI EXPLORATION <i /> BRAND IDENTITY
             </span>
-            {!videoError && (
-              <button
-                className="video-toggle"
-                onClick={toggleVideo}
-                aria-label={playing ? "暂停背景视频" : "播放背景视频"}
-              >
-                <span aria-hidden="true">{playing ? "Ⅱ" : "▷"}</span>{" "}
-                {playing ? "PAUSE" : "PLAY"}
-              </button>
-            )}
           </div>
         </section>
 

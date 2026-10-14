@@ -55,23 +55,6 @@ try {
         src: image.getAttribute("src"),
         loaded: image.complete && image.naturalWidth > 0,
       })),
-      video: (() => {
-        const video = document.querySelector("video");
-        const canvas = document.createElement("canvas");
-        canvas.width = 24;
-        canvas.height = 24;
-        const context = canvas.getContext("2d");
-        context.drawImage(video, 0, 0, 24, 24);
-        const pixels = context.getImageData(0, 0, 24, 24).data;
-        let bright = 0;
-        for (let i = 0; i < pixels.length; i += 4)
-          if (pixels[i] + pixels[i + 1] + pixels[i + 2] > 100) bright++;
-        return {
-          readyState: video.readyState,
-          width: video.videoWidth,
-          brightPixels: bright,
-        };
-      })(),
       sections: [...document.querySelectorAll("main > section[id]")].map(
         (section) => section.id,
       ),
@@ -82,8 +65,6 @@ try {
       errors.length ||
       result.width > width ||
       result.images.some((image) => !image.loaded) ||
-      result.video.width < 1 ||
-      result.video.brightPixels < 20 ||
       result.emailLinks < 1
     )
       throw new Error(

@@ -18,7 +18,7 @@ npm run dev
 - 个人姓名、邮箱、介绍与项目文案：`app/src/content.js`
 - 页面结构和交互：`app/src/App.jsx`
 - 样式与响应式布局：`app/src/styles.css`
-- 首页动态视觉源文件：`app/scripts/media-scene.js`
-- 重新生成首页视频和海报：`npm run generate:media`，然后运行 `npm run build`
+- FORM 项目静态封面源文件：`app/scripts/media-scene.js`
+- 重新生成项目封面：`npm run generate:media`，然后运行 `npm run build`
 
 当前三张作品封面均标注为概念展示。真实项目经历、客户信息、绩效数字与肖像素材应在提供可核实材料后替换。

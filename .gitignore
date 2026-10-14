@@ -25,3 +25,5 @@ playwright-report/
 
 # Ignore files created by MacOS
 .DS_Store
+
+.learnings/

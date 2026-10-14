@@ -4,13 +4,13 @@ export const profile = {
   university: "广东技术师范大学",
   major: "电气工程及其自动化",
   grade: "本科生 · 2024.09—2028.06（预计）",
-  status: "学生 / 研究学习者",
+  status: "学生",
   github: "https://github.com/Fubuki007",
   email: "hejiawei1021@163.com",
   phone: "15976193039",
   description:
-    "我是一名电气工程及其自动化专业本科生，正在围绕通感一体化与雷达感知开展系统建模、算法仿真和论文写作训练。这里记录我在学习、科研与实践中的阶段性进展。",
-  motto: "把问题说清楚，再把结果做出来。",
+    "",
+  motto: "",
 };
 
 export const education = [
@@ -18,7 +18,7 @@ export const education = [
     period: "2024.09—2028.06（预计）",
     school: "广东技术师范大学",
     major: "电气工程及其自动化 · 本科",
-    details: "GPA 3.5 / 5.0",
+    details: "",
   },
 ];
 
@@ -76,5 +76,4 @@ export const skills = [
   { label: "MATLAB / Python", detail: "通信物理层建模、算法实现与性能对比仿真" },
   { label: "C 语言", detail: "全国计算机等级考试二级，具备程序设计基础" },
   { label: "学术写作", detail: "英文摘要、论文初稿、排版与图表整理" },
-  { label: "英语阅读", detail: "CET-4 535 · CET-6 479，可阅读 IEEE 等专业文献" },
 ];

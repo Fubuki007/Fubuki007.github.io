@@ -8,6 +8,14 @@
       "sourceUrl": "https://github.com/Takeoff0518/grid-splitter-react",
       "category": "图片工具",
       "description": "将图片裁剪为九宫格或六宫格，适合社交媒体发布。"
+    },
+    {
+      "id": "bilibilidownload",
+      "title": "B站视频下载器",
+      "url": "https://raw.githubusercontent.com/Fubuki007/bilibilidownload/refs/heads/main/B%E7%AB%99%E8%A7%86%E9%A2%91%E4%B8%8B%E8%BD%BD%E5%99%A8.exe",
+      "sourceUrl": "https://github.com/Fubuki007/bilibilidownload",
+      "category": "视频工具",
+      "description": "Windows 桌面视频下载工具，支持 B 站链接解析、清晰度选择和断点续传。"
     }
   ]
 }

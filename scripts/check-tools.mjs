@@ -12,7 +12,9 @@ for (const install of (await readdir(cache)).filter((name) => name.startsWith("c
 }
 const browser = await chromium.launch({ executablePath, headless: true });
 const baseUrl = process.env.PREVIEW_URL || "http://127.0.0.1:5173/";
-const seed = JSON.parse(await readFile("app/public/data/tools.json", "utf8"));
+// Keep the CRUD fixture stable as the real bookmark collection grows.
+const initialCollection = JSON.parse(await readFile("app/public/data/tools.json", "utf8"));
+const seed = { version: 1, bookmarks: [initialCollection.bookmarks.find((item) => item.id === "grid-splitter-react")] };
 const api = "https://api.github.com/repos/Fubuki007/Fubuki007.github.io/contents/app/public/data/tools.json";
 const fakeToken = "test-only-token";
 let data = structuredClone(seed);

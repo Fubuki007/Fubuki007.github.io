@@ -256,7 +256,7 @@ export default function ToolsPage() {
             <p className="bookmark-description">{item.description || "暂无说明"}</p>
             <span className="bookmark-domain">{new URL(item.url).hostname}</span>
             <div className="bookmark-card-bottom">
-              <a className="open-tool" href={item.url} target="_blank" rel="noopener noreferrer">打开工具 <Icon name="arrow" /></a>
+              <a className="open-tool" href={item.url} target="_blank" rel="noopener noreferrer">{/\.exe$/i.test(new URL(item.url).pathname) ? "下载程序" : "打开工具"} <Icon name={/\.exe$/i.test(new URL(item.url).pathname) ? "download" : "arrow"} /></a>
               {item.sourceUrl && <a className="source-link" href={item.sourceUrl} target="_blank" rel="noopener noreferrer">{new URL(item.sourceUrl).hostname === "github.com" ? "GitHub 源码" : "备用链接"} <Icon name="arrow" /></a>}
               {session && <div className="bookmark-edit-actions">
                 <button className="icon-button" aria-label={`编辑 ${item.title}`} disabled={controlsDisabled} onClick={() => setDialog({ type: "edit", item })}><Icon name="edit" /></button>

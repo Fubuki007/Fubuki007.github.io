@@ -464,6 +464,11 @@ export default function ArcadeMap() {
   const [locationError, setLocationError] = useState("");
   const [locationHelp, setLocationHelp] = useState(false);
   const [manualPick, setManualPick] = useState(false);
+  const [placeMode, setPlaceMode] = useState(false);
+  const [placeQuery, setPlaceQuery] = useState("");
+  const [placeResults, setPlaceResults] = useState([]);
+  const [placeSearching, setPlaceSearching] = useState(false);
+  const [placeSearchError, setPlaceSearchError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [geocodeError, setGeocodeError] = useState("");
@@ -480,6 +485,7 @@ export default function ArcadeMap() {
   const markersRef = useRef(new Map());
   const manualPickRef = useRef(false);
   const geocodeCancelRef = useRef(false);
+  const placeInputRef = useRef(null);
   const userOverlayRef = useRef({ marker: null, circle: null });
 
   const activeConfig = useMemo(() => {
@@ -807,6 +813,9 @@ export default function ArcadeMap() {
       if (!point) return;
       setManualPick(false);
       manualPickRef.current = false;
+      setPlaceMode(false);
+      setPlaceResults([]);
+      setLocationHelp(false);
       setUserLocation({ lng: point[0], lat: point[1], label: "地图手动选点" });
       setRadiusKm(2);
       setSort("distance");
@@ -889,6 +898,9 @@ export default function ArcadeMap() {
     setUserLocation({ lng: result.point[0], lat: result.point[1], label: result.label });
     setRadiusKm(2);
     setSort("distance");
+    setPlaceMode(false);
+    setPlaceResults([]);
+    setLocationHelp(false);
     map.setZoomAndCenter(14, result.point);
   }
   function toggleManualPick() {
@@ -897,7 +909,108 @@ export default function ArcadeMap() {
       return;
     }
     setLocationError("");
+    setLocationHelp(false);
+    setPlaceMode(false);
+    setPlaceResults([]);
     setManualPick((current) => !current);
+  }
+
+  function openPlaceMode() {
+    if (!engine) {
+      setLocationError("地图加载后才能搜索地点。请先配置高德 Key。");
+      return;
+    }
+    setManualPick(false);
+    manualPickRef.current = false;
+    setLocationError("");
+    setLocationHelp(false);
+    setPlaceMode(true);
+    setPlaceSearchError("");
+    window.setTimeout(() => placeInputRef.current?.focus(), 60);
+  }
+
+  function togglePlaceMode() {
+    if (placeMode) {
+      setPlaceMode(false);
+      setPlaceResults([]);
+      setPlaceSearchError("");
+      return;
+    }
+    openPlaceMode();
+  }
+
+  async function searchPlaces(event, keywordOverride = null) {
+    event?.preventDefault?.();
+    if (!engine) {
+      setPlaceSearchError("地图还没有加载完成。");
+      return;
+    }
+    const keyword = String(keywordOverride ?? placeQuery).trim();
+    if (!keyword) {
+      setPlaceSearchError("请输入一个地点、商场或地址。");
+      return;
+    }
+
+    setPlaceSearching(true);
+    setPlaceSearchError("");
+    setPlaceResults([]);
+    const AMap = engine.AMap;
+    const service = new AMap.PlaceSearch({
+      city: "广州",
+      citylimit: true,
+      pageSize: 6,
+      extensions: "base",
+    });
+
+    const outcome = await new Promise((resolve) => {
+      let settled = false;
+      const timer = window.setTimeout(() => {
+        if (settled) return;
+        settled = true;
+        resolve({ error: "地点搜索超时，请稍后重试。" });
+      }, 10000);
+
+      service.search(keyword, (status, result) => {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timer);
+        const pois = result?.poiList?.pois || [];
+        const items = pois
+          .map((poi, index) => ({
+            id: poi.id || `${keyword}-${index}`,
+            name: poi.name || keyword,
+            address: poi.address || "",
+            district: poi.district || "",
+            point: asCoordinates(poi.location),
+          }))
+          .filter((poi) => poi.point);
+        resolve(items.length ? { items } : { error: "没有找到这个地点，请换一个关键词。" });
+      });
+    });
+
+    setPlaceSearching(false);
+    if (outcome.error) {
+      setPlaceSearchError(outcome.error);
+      return;
+    }
+    setPlaceResults(outcome.items);
+  }
+
+  function choosePlace(poi) {
+    if (!engine || !poi?.point) return;
+    const point = poi.point;
+    const label = poi.address ? `${poi.name} · ${poi.address}` : poi.name;
+    setUserLocation({ lng: point[0], lat: point[1], label });
+    setRadiusKm(2);
+    setSort("distance");
+    setPlaceMode(false);
+    setPlaceResults([]);
+    setPlaceQuery(poi.name || "");
+    setLocationError("");
+    setLocationHelp(false);
+    setManualPick(false);
+    manualPickRef.current = false;
+    engine.map.setZoomAndCenter(15, point);
   }
 
   function fitResults() {
@@ -1157,7 +1270,7 @@ export default function ArcadeMap() {
             </h1>
             <p className="arcade-lead">
               把截图里的价格表做成可定位、可搜索、可筛范围的城市机厅雷达。允许定位后，
-              以当前位置为圆心查看 1 / 2 / 5 公里内的店铺；不允许定位时，也可以按店名、
+              以当前位置为圆心查看 1 到 10 公里内的店铺；不允许定位时，也可以按店名、
               商圈和区域直接检索。
             </p>
             <div className="arcade-hero-actions">
@@ -1168,6 +1281,10 @@ export default function ArcadeMap() {
               <button className="arcade-button ghost large" type="button" onClick={toggleManualPick} disabled={!engine}>
                 <Icon name="pin" size={16} />
                 {manualPick ? "取消手动选点" : "在地图上选点"}
+              </button>
+              <button className="arcade-button ghost large" type="button" onClick={togglePlaceMode} disabled={!engine}>
+                <Icon name="search" size={16} />
+                {placeMode ? "关闭地点搜索" : "输入地点查找"}
               </button>
             </div>
           </div>          <aside className="arcade-hero-panel" aria-label="数据概览">
@@ -1270,31 +1387,43 @@ export default function ArcadeMap() {
                     <Icon name="pin" size={15} />
                     手动选点
                   </button>
+                  <button className={`arcade-button compact ${placeMode ? "active" : "ghost"}`} type="button" onClick={togglePlaceMode} disabled={!engine}>
+                    <Icon name="search" size={15} />
+                    输入地点
+                  </button>
                 </div>
               </div>
               <div className="arcade-control-row lower">
-                <div className="radius-group" aria-label="搜索范围">
-                  <span className="radius-label">搜索范围</span>
-                  {[1, 2, 5].map((value) => (
+                <div className="radius-slider-wrap" aria-label="距离范围">
+                  <div className="radius-slider-head">
+                    <label htmlFor="arcade-radius">距离范围</label>
+                    <output htmlFor="arcade-radius">{!userLocation ? "定位后可用" : radiusKm == null ? "不限距离" : `${radiusKm} km`}</output>
+                  </div>
+                  <div className="radius-slider-control">
+                    <span>1 km</span>
+                    <input
+                      id="arcade-radius"
+                      className="radius-slider"
+                      type="range"
+                      min="1"
+                      max="10"
+                      step="1"
+                      value={radiusKm ?? 10}
+                      onChange={(event) => setRadiusKm(Number(event.target.value))}
+                      disabled={!userLocation}
+                      style={{ "--range-progress": `${((Number(radiusKm ?? 10) - 1) / 9) * 100}%` }}
+                    />
+                    <span>10 km</span>
                     <button
                       type="button"
-                      key={value}
-                      className={radiusKm === value ? "is-active" : ""}
-                      onClick={() => setRadiusKm(value)}
+                      className={`radius-unlimited${radiusKm == null ? " is-active" : ""}`}
+                      onClick={() => setRadiusKm(null)}
                       disabled={!userLocation}
-                      aria-pressed={radiusKm === value}
+                      aria-pressed={radiusKm == null}
                     >
-                      {value} km
+                      不限
                     </button>
-                  ))}
-                  <button
-                    type="button"
-                    className={radiusKm == null ? "is-active" : ""}
-                    onClick={() => setRadiusKm(null)}
-                    aria-pressed={radiusKm == null}
-                  >
-                    全部
-                  </button>
+                  </div>
                 </div>
 
                 <div className="location-summary">
@@ -1305,7 +1434,7 @@ export default function ArcadeMap() {
                       <span className="location-count">{filteredArcades.length} 家结果</span>
                     </>
                   ) : (
-                    <span>尚未定位。定位后可筛选附近 1 / 2 / 5 公里的机厅。</span>
+                    <span>尚未定位。定位后可用滑条筛选 1 到 10 公里内的机厅。</span>
                   )}
                 </div>
               </div>
@@ -1315,6 +1444,7 @@ export default function ArcadeMap() {
                   <span>{locationError}</span>
                   <div className="location-error-actions">
                     <button type="button" onClick={toggleManualPick}>改用手动选点</button>
+                    <button type="button" onClick={togglePlaceMode}>输入地点查找</button>
                     <button type="button" onClick={() => setLocationHelp((value) => !value)}>
                       {locationHelp ? "收起开启方法" : "如何开启定位"}
                     </button>
@@ -1331,6 +1461,61 @@ export default function ArcadeMap() {
                     <li>修改后刷新页面，再点定位我；仍然失败时直接用地图手动选点。</li>
                   </ol>
                 </div>
+              )}
+              {placeMode && (
+                <form className="place-search-panel" onSubmit={searchPlaces}>
+                  <div className="place-search-head">
+                    <div>
+                      <p className="arcade-eyebrow">SEARCH A PLACE</p>
+                      <h3>输入一个地点作为圆心</h3>
+                    </div>
+                    <button type="button" className="place-search-close" onClick={togglePlaceMode}>
+                      取消
+                    </button>
+                  </div>
+                  <div className="place-search-box">
+                    <Icon name="search" size={16} />
+                    <input
+                      ref={placeInputRef}
+                      type="search"
+                      value={placeQuery}
+                      onChange={(event) => setPlaceQuery(event.target.value)}
+                      placeholder="例如：天河城、正佳广场、北京路"
+                      aria-label="输入地点"
+                    />
+                    <button
+                      className="arcade-button primary compact"
+                      type="submit"
+                      disabled={placeSearching || !placeQuery.trim()}
+                    >
+                      {placeSearching ? "搜索中..." : "搜索地点"}
+                    </button>
+                  </div>
+                  <div className="place-quick-row">
+                    <span>快速选择</span>
+                    {["天河城", "正佳广场", "北京路", "江南西", "番禺万博"].map((name) => (
+                      <button type="button" key={name} onClick={() => { setPlaceQuery(name); searchPlaces(null, name); }}>
+                        {name}
+                      </button>
+                    ))}
+                  </div>
+                  {placeSearchError && <p className="place-search-error" role="alert">{placeSearchError}</p>}
+                  {placeResults.length > 0 && (
+                    <div className="place-results">
+                      <p className="place-results-label">选择一个地点作为附近搜索中心</p>
+                      {placeResults.map((poi) => (
+                        <button type="button" className="place-result" key={poi.id} onClick={() => choosePlace(poi)}>
+                          <span className="place-result-pin"><Icon name="pin" size={14} /></span>
+                          <span className="place-result-copy">
+                            <strong>{poi.name}</strong>
+                            <small>{[poi.district, poi.address].filter(Boolean).join(" · ") || "广州"}</small>
+                          </span>
+                          <Icon name="external" size={13} />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </form>
               )}
               {manualPick && <p className="arcade-inline-hint">请直接点击地图选择你的位置；选中后会自动启用 2 公里范围。</p>}
             </section>
@@ -1430,7 +1615,7 @@ export default function ArcadeMap() {
                     </h2>
                   </div>
                   <span className="results-meta">
-                    {radiusActive ? `${radiusKm} km 内` : userLocation ? "按距离排序" : "按单价排序"}
+                    {radiusActive ? `${radiusKm} km 内` : userLocation ? "不限距离 · 按距离排序" : "按单价排序"}
                   </span>
                 </div>
 
@@ -1508,7 +1693,7 @@ export default function ArcadeMap() {
                 <h2>定位只在你的浏览器里发生。</h2>
                 <p>
                   浏览器取得的位置只用于计算与店铺坐标之间的直线距离，不会写入站点数据库。
-                  1 / 2 / 5 公里范围按照直线距离筛选，实际步行距离请以高德导航为准。
+                  1 到 10 公里范围或不限距离均按照直线距离筛选，实际步行距离请以高德导航为准。
                 </p>
               </div>
               <div>

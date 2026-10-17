@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "bookmarks": [
+    {
+      "id": "grid-splitter-react",
+      "title": "九宫格图片裁剪",
+      "url": "https://grid-splitter.tbpdt.top/",
+      "sourceUrl": "https://github.com/Takeoff0518/grid-splitter-react",
+      "category": "图片工具",
+      "description": "将图片裁剪为九宫格或六宫格，适合社交媒体发布。"
+    }
+  ]
+}

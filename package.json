@@ -7,7 +7,8 @@
     "dev": "vite --host 127.0.0.1",
     "build": "vite build && node scripts/publish-build.mjs",
     "preview": "vite preview --host 127.0.0.1",
-    "test:preview": "node scripts/check-preview.mjs"
+    "test:preview": "node scripts/check-preview.mjs",
+    "test:tools": "node scripts/check-tools.mjs"
   },
   "dependencies": {
     "react": "^19.2.0",

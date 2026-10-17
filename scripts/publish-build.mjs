@@ -13,7 +13,7 @@ function withinRoot(path) {
   return path;
 }
 
-for (const name of ["index.html", "favicon.svg", "media"]) {
+for (const name of ["index.html", "favicon.svg", "tools", "data", "media"]) {
   const destination = withinRoot(join(root, name));
   await rm(destination, { recursive: true, force: true });
   if (name === "media") {

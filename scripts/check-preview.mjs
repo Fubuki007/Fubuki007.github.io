@@ -73,6 +73,8 @@ try {
       brokenAnchors: [...document.querySelectorAll('a[href^="#"]')]
         .map((link) => link.getAttribute("href").slice(1))
         .filter((id) => id && !document.getElementById(id)),
+      removedAwardPresent: document.body.innerText.includes("ACM 算法竞赛"),
+      toolsLink: document.querySelector('nav a[href="/tools/"]') !== null,
     }));
     if (
       !response.ok() ||
@@ -81,6 +83,8 @@ try {
       result.images.some((image) => !image.loaded) ||
       result.emailLinks < 1 ||
       result.brokenAnchors.length
+      || result.removedAwardPresent
+      || !result.toolsLink
     )
       throw new Error(
         `${name}: ${JSON.stringify({ status: response.status(), errors, result })}`,

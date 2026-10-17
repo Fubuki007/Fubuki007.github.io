@@ -120,6 +120,9 @@ export default function App() {
                 {item.label}
               </a>
             ))}
+            <a href="/tools/" onClick={closeMenu}>
+              小工具
+            </a>
             <a className="nav-contact" href="#contact" onClick={closeMenu}>
               联系我 <Arrow diagonal />
             </a>
@@ -359,6 +362,7 @@ export default function App() {
             <footer>
               <a className="wordmark" href="#home">吹雪<span className="wordmark-dot">·</span></a>
               <span>© {new Date().getFullYear()} 吹雪 / ACADEMIC HOMEPAGE</span>
+              <a href="/tools/">小工具 <Arrow diagonal /></a>
               <a href={profile.github} target="_blank" rel="noopener noreferrer">GITHUB <Arrow diagonal /></a>
               <a href="#home" className="back-top">回到顶部 ↑</a>
             </footer>

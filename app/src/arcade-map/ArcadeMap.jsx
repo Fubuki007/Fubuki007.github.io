@@ -113,6 +113,24 @@ function formatPrice(value) {
   return Number.isFinite(number) ? `¥${number.toFixed(2)}` : "价格待补";
 }
 
+function inAppBrowserName() {
+  const ua = window.navigator.userAgent.toLowerCase();
+  if (ua.includes("micromessenger")) return "微信";
+  if (ua.includes("mqqbrowser") || ua.includes(" qq/")) return "QQ";
+  return "";
+}
+
+function friendlyLocationError(code, message) {
+  const app = inAppBrowserName();
+  if (code === 1 || /permission|denied/i.test(String(message || ""))) {
+    if (app) return app + " 内置浏览器拒绝了定位权限。请点右上角菜单选择在浏览器打开，再允许位置信息。";
+    return "浏览器拒绝了定位权限。请点地址栏旁的锁形或站点设置图标，把位置权限改为允许，然后刷新页面；也可以直接使用手动选点。";
+  }
+  if (code === 2) return "手机没有提供位置。请确认系统定位服务已开启，并允许浏览器使用位置信息。";
+  if (code === 3) return "定位超时。请到信号更好的位置重试，或使用手动选点。";
+  return message || "定位失败。请允许浏览器使用位置信息，或使用手动选点。";
+}
+
 function stripEllipsis(value) {
   return String(value || "").replace(/…/g, "").trim();
 }
@@ -444,6 +462,7 @@ export default function ArcadeMap() {
   const [userLocation, setUserLocation] = useState(null);
   const [locating, setLocating] = useState(false);
   const [locationError, setLocationError] = useState("");
+  const [locationHelp, setLocationHelp] = useState(false);
   const [manualPick, setManualPick] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -808,6 +827,19 @@ export default function ArcadeMap() {
     setLocating(true);
     setLocationError("");
     setManualPick(false);
+    setLocationHelp(false);
+
+    try {
+      const permission = await window.navigator.permissions?.query?.({ name: "geolocation" });
+      if (permission?.state === "denied") {
+        setLocating(false);
+        setLocationError(friendlyLocationError(1));
+        setLocationHelp(true);
+        return;
+      }
+    } catch {
+      /* Some mobile WebViews do not expose the Permissions API. */
+    }
 
     const AMap = engine.AMap;
     const map = engine.map;
@@ -849,7 +881,8 @@ export default function ArcadeMap() {
 
     setLocating(false);
     if (!result.ok) {
-      setLocationError(result.message);
+      setLocationError(friendlyLocationError(0, result.message));
+      setLocationHelp(true);
       return;
     }
 
@@ -1277,7 +1310,28 @@ export default function ArcadeMap() {
                 </div>
               </div>
 
-              {locationError && <p className="arcade-inline-error" role="alert">{locationError}</p>}
+              {locationError && (
+                <div className="arcade-inline-error" role="alert">
+                  <span>{locationError}</span>
+                  <div className="location-error-actions">
+                    <button type="button" onClick={toggleManualPick}>改用手动选点</button>
+                    <button type="button" onClick={() => setLocationHelp((value) => !value)}>
+                      {locationHelp ? "收起开启方法" : "如何开启定位"}
+                    </button>
+                  </div>
+                </div>
+              )}
+              {locationHelp && (
+                <div className="location-help-card">
+                  <strong>定位权限开启方法</strong>
+                  <ol>
+                    <li>如果在微信或 QQ 内打开：点右上角菜单，选择在浏览器打开。</li>
+                    <li>iPhone Safari：点地址栏旁的 aA 或网站设置，把位置权限改为允许，并确认系统定位已开启。</li>
+                    <li>Android Chrome 或 Edge：点地址栏旁的锁形图标，进入权限，把位置改为允许。</li>
+                    <li>修改后刷新页面，再点定位我；仍然失败时直接用地图手动选点。</li>
+                  </ol>
+                </div>
+              )}
               {manualPick && <p className="arcade-inline-hint">请直接点击地图选择你的位置；选中后会自动启用 2 公里范围。</p>}
             </section>
             <section className="arcade-map-layout" aria-label="地图与结果">

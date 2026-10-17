@@ -90,6 +90,14 @@
 .arcade-inline-error, .arcade-inline-hint { margin-top: 12px; border-radius: 7px; padding: 9px 11px; font-size: 10px; line-height: 1.7; }
 .arcade-inline-error { color: #efbbc3; background: #b84c5920; border: 1px solid #d87e8b3d; }
 .arcade-inline-hint { color: #c4cee6; background: #9da8ff12; border: 1px solid #9da8ff27; }
+.arcade-inline-error { display: flex; flex-direction: column; gap: 9px; }
+.location-error-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.location-error-actions button { background: transparent; color: #f0c1c8; border-bottom: 1px solid #f0c1c866; padding: 2px 0; font-size: 9px; }
+.location-error-actions button:hover { color: #fff; border-color: #fff; }
+.location-help-card { margin-top: 11px; border: 1px solid #9da8ff2b; border-radius: 8px; background: #11182acc; padding: 13px 14px; color: #91a1be; font-size: 9px; line-height: 1.85; }
+.location-help-card strong { display: block; color: #c6d0e5; font-size: 10px; font-weight: 500; margin-bottom: 7px; }
+.location-help-card ol { margin: 0; padding-left: 17px; }
+.location-help-card li + li { margin-top: 5px; }
 .arcade-map-layout { display: grid; grid-template-columns: minmax(0, 1.38fr) minmax(340px, .62fr); gap: 18px; margin-top: 18px; align-items: stretch; }
 .arcade-map-panel, .arcade-results-panel { border: 1px solid var(--line); border-radius: 12px; background: #0d1322c9; overflow: hidden; min-width: 0; }
 .arcade-map-panel { display: flex; flex-direction: column; }

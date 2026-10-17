@@ -79,7 +79,7 @@ try {
   watch(page);
   await page.goto(new URL("tools/", baseUrl).href);
   await waitForSync(page);
-  assert.equal(await page.title(), "小工具 — 吹雪");
+  assert.equal(await page.title(), "小工具 — Fubuki");
   assert.equal(await page.getByRole("heading", { level: 1 }).textContent(), "小工具。");
   assert.equal(await page.getByRole("link", { name: "GitHub 源码" }).getAttribute("href"), "https://github.com/Takeoff0518/grid-splitter-react");
   assert.equal(await page.getByRole("link", { name: "打开工具" }).getAttribute("href"), "https://grid-splitter.tbpdt.top/");

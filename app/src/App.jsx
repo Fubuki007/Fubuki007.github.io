@@ -140,8 +140,9 @@ export default function App() {
               <div className="eyebrow hero-eyebrow">
                 <span className="live-dot" /> ACADEMIC PROFILE / 2026
               </div>
+              <p className="hero-greeting">你好，欢迎来到我的主页。</p>
               <h1 id="hero-title">
-              吹雪<span className="accent-text">。</span>
+                {profile.name}<span className="accent-text">.</span>
               </h1>
               <p className="hero-lead">
               广东技术师范大学
@@ -151,6 +152,9 @@ export default function App() {
               <div className="hero-actions">
                 <a className="pill-button primary" href="#research">
                   查看科研记录 <Arrow diagonal />
+                </a>
+                <a className="pill-button hero-tools-link" href="/tools/">
+                  小工具 <Arrow diagonal />
                 </a>
                 <a className="quiet-link" href="#about">
                   认识我 <Arrow />
@@ -360,8 +364,8 @@ export default function App() {
               </div>
             </div>
             <footer>
-              <a className="wordmark" href="#home">吹雪<span className="wordmark-dot">·</span></a>
-              <span>© {new Date().getFullYear()} 吹雪 / ACADEMIC HOMEPAGE</span>
+              <a className="wordmark" href="#home">{profile.name}<span className="wordmark-dot">·</span></a>
+              <span>© {new Date().getFullYear()} {profile.name} / ACADEMIC HOMEPAGE</span>
               <a href="/tools/">小工具 <Arrow diagonal /></a>
               <a href={profile.github} target="_blank" rel="noopener noreferrer">GITHUB <Arrow diagonal /></a>
               <a href="#home" className="back-top">回到顶部 ↑</a>

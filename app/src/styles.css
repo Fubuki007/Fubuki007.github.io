@@ -73,9 +73,12 @@ img { max-width: 100%; display: block; }
 .hero-glow-two { width: 570px; height: 570px; right: -4%; top: 8%; border: 1px solid #6cc8ff12; }
 .hero-content { height: 100%; min-height: inherit; padding-top: clamp(170px, 22vh, 245px); display: grid; grid-template-columns: minmax(0, 1.16fr) minmax(330px, .84fr); gap: 8vw; align-items: start; position: relative; z-index: 1; }
 .hero-eyebrow { display: flex; align-items: center; gap: 11px; margin-bottom: 28px; color: #b7c3dc; }
+.hero-greeting { margin-bottom: 17px; color: #bbc5dc; font-size: 14px; line-height: 1.8; }
 .hero h1 { font-size: clamp(64px, 8.5vw, 144px); line-height: 1.08; letter-spacing: -.085em; font-weight: 500; }
 .hero-lead { margin-top: 31px; border-left: 1px solid var(--accent); padding-left: 17px; color: #bbc5dc; font-size: 14px; line-height: 2; letter-spacing: .6px; }
-.hero-actions { display: flex; align-items: center; gap: 27px; margin-top: 37px; }
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 27px; margin-top: 37px; }
+.hero-tools-link { border: 1px solid #9da8ff70; background: #9da8ff0a; color: #c6ccff; }
+.hero-tools-link:hover { background: #9da8ff20; border-color: var(--accent); }
 .pill-button { border-radius: 40px; display: inline-flex; align-items: center; justify-content: space-between; gap: 34px; padding: 17px 21px; min-height: 50px; font-size: 12px; transition: background .25s, transform .25s, border-color .25s; }
 .pill-button .arrow { width: 17px; height: 17px; }
 .primary { background: var(--accent); color: #101426; }
@@ -218,7 +221,7 @@ footer .back-top { margin-left: 16px; color: #a7b4d0; }
   .hero h1 { font-size: clamp(52px, 16vw, 77px); letter-spacing: -.1em; }
   .hero-eyebrow { font-size: 8px; margin-bottom: 25px; }
   .hero-lead { margin-top: 26px; font-size: 12px; line-height: 1.9; }
-  .hero-actions { margin-top: 30px; gap: 20px; }
+  .hero-actions { margin-top: 30px; gap: 14px 20px; }
   .hero-panel { width: 100%; margin-top: 72px; }
   .panel-topline, .panel-footer { font-size: 8px; }
   .focus-item strong { font-size: 13px; }

@@ -12,6 +12,7 @@ const AMAP_PLUGINS = [
 const CONFIG_CACHE_KEY = "fubuki-arcade-map-amap-config-v1";
 const COORD_CACHE_KEY = "fubuki-arcade-map-coordinate-cache-v1";
 const CITY_CODE = "440100";
+const ARCADE_DOCUMENT_URL = "https://docs.qq.com/smartsheet/DWVNwdEVxZ0F5UExV?nlc=1&tab=t00i2h&viewId=v2JKhc";
 const DISTRICTS = ["海珠", "天河", "白云", "番禺", "花都", "增城", "黄埔", "越秀", "荔湾", "从化"];
 const DISTRICT_COLORS = {
   海珠: "#6cc8ff",
@@ -212,6 +213,7 @@ function Icon({ name, size = 18, className = "" }) {
     search: <><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></>,
     target: <><circle cx="12" cy="12" r="7" /><circle cx="12" cy="12" r="2.5" /><path d="M12 2v3m0 14v3M2 12h3m14 0h3" /></>,
     pin: <><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></>,
+    doc: <><path d="M6 2.75h8l4 4V21H6V2.75Z" /><path d="M14 2.75v5h5M9 12h6M9 16h6" /></>,
     map: <><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3V6Z" /><path d="M9 3v15m6-12v15" /></>,
     fit: <><path d="M8 3H3v5m13-5h5v5M8 21H3v-5m13 5h5v-5" /></>,
     settings: <><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" /><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V21h-4v-.08A1.7 1.7 0 0 0 8.94 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.57 15 1.7 1.7 0 0 0 3 14H3v-4h.08A1.7 1.7 0 0 0 4.6 8.94a1.7 1.7 0 0 0-.34-1.88L4.2 7l2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.57 1.7 1.7 0 0 0 10 3V3h4v.08A1.7 1.7 0 0 0 15.06 4.6a1.7 1.7 0 0 0 1.88-.34L17 4.2 19.83 7l-.06.06A1.7 1.7 0 0 0 19.43 9 1.7 1.7 0 0 0 21 10h.08v4H21a1.7 1.7 0 0 0-1.6 1Z" /></>,
@@ -1322,6 +1324,27 @@ export default function ArcadeMap() {
             </a>
           </aside>
         </section>
+        <section className="arcade-doc-banner" aria-labelledby="arcade-doc-title">
+          <div className="arcade-doc-copy">
+            <p className="arcade-eyebrow">COMMUNITY / SOURCE DOCUMENT</p>
+            <h2 id="arcade-doc-title">价格、店铺和加群方式，都在原文档里。</h2>
+            <p className="arcade-doc-warning">本网站只提供定位，请自行加群</p>
+          </div>
+          <a
+            className="arcade-doc-button"
+            href={ARCADE_DOCUMENT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="arcade-doc-button-icon"><Icon name="doc" size={19} /></span>
+            <span className="arcade-doc-button-copy">
+              <strong>拼好币文档链接</strong>
+              <small>打开腾讯文档查看完整信息</small>
+            </span>
+            <Icon name="external" size={16} />
+          </a>
+        </section>
+
         {!bootReady && (
           <div className="arcade-loading-state">
             <span className="arcade-spinner" />

@@ -2,6 +2,14 @@
   "version": 1,
   "bookmarks": [
     {
+      "id": "guangzhou-arcade-map",
+      "title": "广州机厅地图",
+      "url": "https://fubuki007.github.io/tools/arcade-map/",
+      "sourceUrl": "https://github.com/Fubuki007/Fubuki007.github.io/tree/master/app/tools/arcade-map",
+      "category": "地图工具",
+      "description": "按定位和 1 / 2 / 5 公里范围检索广州机厅，查看单价、币数与地址。"
+    },
+    {
       "id": "grid-splitter-react",
       "title": "九宫格图片裁剪",
       "url": "https://grid-splitter.tbpdt.top/",
